@@ -12,4 +12,3 @@ cv.rectangle(img,(100,100),(400,400),(0,255,0),5)
 cv.putText(img,"Hello",(100,150),cv.FONT_HERSHEY_COMPLEX,5,(255,255,255),3)
 #3 显示结果
 plt.imshow(img[:,:,::-1])
-plt.show()

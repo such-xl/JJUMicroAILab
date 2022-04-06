@@ -1,8 +1,7 @@
-import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
 #1读取图像
-img = cv.imread('CV/resource/img/captain.jpg')
+img = cv.imread('resource/img/captain.jpg',0)
 #2显示图像
 #2.1 opencv显示
 cv.imshow("captain",img)
@@ -13,4 +12,4 @@ plt.imshow(img,cmap=plt.cm.gray)
 plt.show()
 
 #3 图像保存
-cv.imwrite("CV/resource/img/captain.png",img)
+cv.imwrite("resource/img/captain.png",img)

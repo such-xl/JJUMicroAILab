@@ -1,0 +1,12 @@
+[workspace]
+restore_data_on_startup = True
+save_data_on_exit = True
+save_history = True
+save_non_project_files = False
+project_type = 'empty-project-type'
+recent_files = ['CV\\03图像基础处理.py', 'README.md', 'CV\\01图像的IO操作.py', 'CV\\02图像绘制图形.py', 'CV\\04图像的算数运算.py']
+
+[main]
+version = 0.2.0
+recent_files = []
+
