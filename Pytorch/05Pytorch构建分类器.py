@@ -15,7 +15,8 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print(device)
 # 1:使用torchvision下载数据集
 # 下载数据集并对图片进行调整,因为torchvision数据集的输出PILImage格式，数据域在[0,1],我们将其转换为标准数据域[-1,1]的张量格式
 transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
@@ -78,8 +79,8 @@ class Net(nn.Module):
 
 
 net = Net()
+net.to(device)
 print(net)
-
 # 3定义损失函数 采用交叉熵损失函数和随机梯度下降优化器
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
@@ -92,7 +93,7 @@ for epoch in range(2):
         # print('i=', i)
         # print('data=', data)
         # 从data中取出含有输入图像的张量inputs,标签张量labels
-        inputs, labels = data
+        inputs, labels = data[0].to(device),data[1].to(device)
         # 第一步将梯度清零
         optimizer.zero_grad()
         # 第二步将输入图像进入网络中,得到输出张量
@@ -125,6 +126,7 @@ torch.save(net.state_dict(), PATH)
 # # 加载模型并对测试图片进行预测
 # 首先实例化模型的类对象
 net = Net()
+net.to(device)
 # 加载训练阶段保存好的模型的状态字典
 net.load_state_dict(torch.load(PATH))
 # 利用模型对图片进行预测
@@ -139,7 +141,7 @@ correct = 0
 total = 0
 with torch.no_grad():
     for data in testloader:
-        images, labels = data
+        images, labels = data[0].to(device),data[1].to(device)
         outputs = net(images)
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
@@ -150,14 +152,14 @@ class_correct = list(0. for i in range(10))
 class_total = list(0. for i in range(10))
 with torch.no_grad():
     for data in testloader:
-        images,labels = data
+        images, labels = data[0].to(device),data[1].to(device)
         outputs = net(images)
-        _,predicted = torch.max(outputs,1)
-        c = (predicted==labels).squeeze()
+        _, predicted = torch.max(outputs, 1)
+        c = (predicted == labels).squeeze()
         for i in range(4):
             label = labels[i]
-            class_correct[label]+=c[i].item()
-            class_total[label]+=1
-#打印不同类别的准确率
+            class_correct[label] += c[i].item()
+            class_total[label] += 1
+# 打印不同类别的准确率
 for i in range(10):
-    print('Accuracy of %5s: %2d %%'%(classes[i],100*class_correct[i]/class_total[i]))
+    print('Accuracy of %5s: %2d %%' % (classes[i], 100 * class_correct[i] / class_total[i]))
