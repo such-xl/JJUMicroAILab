@@ -100,12 +100,12 @@ import torch.optim as optim
 # 通过optim创建优化器对象
 optimizer = optim.SGD(net.parameters(), lr=0.01)
 
-#将优化器执行梯度清零操作
+# 将优化器执行梯度清零操作
 optimizer.zero_grad()
 output = net(inp)
-loss = criterion(output,target)
+loss = criterion(output, target)
 
-#对损失值执行反向传播的操作
+# 对损失值执行反向传播的操作
 loss.backward()
-#将参数的更新通过一行标准代码来执行
+# 将参数的更新通过一行标准代码来执行
 optimizer.step()
